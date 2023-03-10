@@ -13,11 +13,13 @@ datasource db {
 model Student {
   id                       String                   @id @default(uuid())
   StudentEnrolledInClasses StudentEnrolledInClass[]
+  name                     String
 }
 
 model Class {
   id                       String                   @id @default(uuid())
   StudentEnrolledInClasses StudentEnrolledInClass[]
+  name                     String
 }
 
 model StudentEnrolledInClass {

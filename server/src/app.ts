@@ -1,5 +1,7 @@
 import express from "express";
 import cors from "cors";
+import { StudentRouter } from "./modules/student/student.route";
+import { ClassRouter } from "./modules/class/class.route";
 
 // Initialization
 const app = express();
@@ -15,5 +17,9 @@ app.use(
     credentials: true,
   })
 );
+
+//Routes
+app.use("/student", StudentRouter);
+app.use("/class", ClassRouter);
 
 export default app;
