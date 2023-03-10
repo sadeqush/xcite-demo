@@ -3,8 +3,10 @@ import { prisma } from "../../prisma";
 export const StudentService = {
   addStudent: async (name: string) => {
     try {
-      await prisma.student.create({ data: { name: name } });
-      return true;
+      const createdStudent = await prisma.student.create({
+        data: { name: name },
+      });
+      return createdStudent;
     } catch (error) {
       return false;
     }
@@ -12,8 +14,11 @@ export const StudentService = {
 
   editStudent: async (id: string, name: string) => {
     try {
-      await prisma.student.update({ where: { id: id }, data: { name: name } });
-      return true;
+      const updatedStudent = await prisma.student.update({
+        where: { id: id },
+        data: { name: name },
+      });
+      return updatedStudent;
     } catch (error) {
       return false;
     }
