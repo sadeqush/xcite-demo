@@ -23,8 +23,8 @@ model Class {
 }
 
 model StudentEnrolledInClass {
-  student   Student @relation(fields: [studentId], references: [id])
-  class     Class   @relation(fields: [classId], references: [id])
+  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  class     Class   @relation(fields: [classId], references: [id], onDelete: Cascade)
   studentId String
   classId   String
 
