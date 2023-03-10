@@ -24,7 +24,10 @@ export const ClassService = {
 
   deleteClass: async (id: string) => {
     try {
-      await prisma.class.delete({ where: { id: id } });
+      await prisma.class.update({
+        where: { id: id },
+        data: { isActive: false },
+      });
       return true;
     } catch (error) {
       return false;
@@ -43,6 +46,7 @@ export const ClassService = {
   getClassSummary: async () => {
     try {
       const classes = await prisma.class.findMany({
+        where: { isActive: true },
         select: {
           id: true,
           name: true,

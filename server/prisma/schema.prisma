@@ -14,12 +14,14 @@ model Student {
   id                       String                   @id @default(uuid())
   StudentEnrolledInClasses StudentEnrolledInClass[]
   name                     String
+  isActive                 Boolean                  @default(true)
 }
 
 model Class {
   id                       String                   @id @default(uuid())
   StudentEnrolledInClasses StudentEnrolledInClass[]
   name                     String
+  isActive                 Boolean                  @default(true)
 }
 
 model StudentEnrolledInClass {

@@ -26,7 +26,10 @@ export const StudentService = {
 
   deleteStudent: async (id: string) => {
     try {
-      await prisma.student.delete({ where: { id: id } });
+      await prisma.student.update({
+        where: { id: id },
+        data: { isActive: false },
+      });
       return true;
     } catch (error) {
       return false;
@@ -35,7 +38,10 @@ export const StudentService = {
 
   getStudentSummary: async () => {
     try {
-      const retval = prisma.student.findMany({ select: { name: true } });
+      const retval = prisma.student.findMany({
+        where: { isActive: true },
+        select: { name: true },
+      });
       return retval;
     } catch (error) {
       return false;

@@ -22,4 +22,9 @@ app.use(
 app.use("/student", StudentRouter);
 app.use("/class", ClassRouter);
 
+//Ping to check server health.
+app.get("/", (req, res) => {
+  return res.status(200).send("I'm Alive!");
+});
+
 export default app;
