@@ -9,3 +9,22 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Student {
+  id                       String                   @id @default(uuid())
+  StudentEnrolledInClasses StudentEnrolledInClass[]
+}
+
+model Class {
+  id                       String                   @id @default(uuid())
+  StudentEnrolledInClasses StudentEnrolledInClass[]
+}
+
+model StudentEnrolledInClass {
+  student   Student @relation(fields: [studentId], references: [id])
+  class     Class   @relation(fields: [classId], references: [id])
+  studentId String
+  classId   String
+
+  @@id([studentId, classId])
+}
