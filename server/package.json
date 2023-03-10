@@ -9,6 +9,7 @@
     "start": "npx ts-node-dev --no-notify --exit-child src"
   },
   "dependencies": {
+    "@prisma/client": "^4.11.0",
     "cors": "^2.8.5",
     "express": "^4.18.2"
   }
