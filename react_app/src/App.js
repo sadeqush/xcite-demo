@@ -21,6 +21,7 @@ import StudentDetail from "./pages/student-details";
 import ClassDetail from "./pages/class-details";
 import { FaUserPlus } from "react-icons/fa";
 import ClassModal from "./components/ClassModal";
+import StudentModal from "./components/StudentModal";
 
 export default function App() {
   const sidebar = useDisclosure();
@@ -88,28 +89,31 @@ export default function App() {
 
         <Box as="main" p="4">
           {/* Add content here, remove div below  */}
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Student />} />
+          <Routes>
+            <Route path="/" element={<Student />} />
 
-              <Route path="/student" element={<Student />} />
-              <Route path="/student/:id" element={<StudentDetail />} />
+            <Route path="/student" element={<Student />} />
+            <Route path="/student/:id" element={<StudentDetail />} />
 
-              <Route path="/class" element={<Class />} />
-              <Route path="/class/:id" element={<ClassDetail />} />
-            </Routes>
-          </BrowserRouter>
+            <Route path="/class" element={<Class />} />
+            <Route path="/class/:id" element={<ClassDetail />} />
+          </Routes>
         </Box>
       </Box>
 
       <ClassModal
-        type="Create"
         isOpen={addClassModal}
-        value={""}
         onClose={() => {
           setAddClassModal(false);
         }}
       ></ClassModal>
+
+      <StudentModal
+        isOpen={addStudentModal}
+        onClose={() => {
+          setAddStudentModal(false);
+        }}
+      ></StudentModal>
     </Box>
   );
 }

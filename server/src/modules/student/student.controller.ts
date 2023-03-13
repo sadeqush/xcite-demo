@@ -51,6 +51,18 @@ export const StudentController = {
     const student = await StudentService.getStudentById(id);
     if (!student) return sendExceptionError(res);
 
-    return res.status(200).json({ student: student });
+    let enrolledClasses: any[] = [];
+
+    student.StudentEnrolledInClasses.forEach((e) => {
+      enrolledClasses.push(e.class);
+    });
+
+    let retval = {
+      name: student.name,
+      id: student.id,
+      enrolledClasses: enrolledClasses,
+    };
+
+    return res.status(200).json({ student: retval });
   },
 };

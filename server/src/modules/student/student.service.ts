@@ -40,7 +40,7 @@ export const StudentService = {
     try {
       const retval = prisma.student.findMany({
         where: { isActive: true },
-        select: { name: true },
+        select: { id: true, name: true },
       });
       return retval;
     } catch (error) {
@@ -52,6 +52,13 @@ export const StudentService = {
     try {
       const student = await prisma.student.findUnique({
         where: { id: studentId },
+        include: {
+          StudentEnrolledInClasses: {
+            select: {
+              class: { select: { name: true, id: true, isActive: true } },
+            },
+          },
+        },
       });
       return student;
     } catch (error) {

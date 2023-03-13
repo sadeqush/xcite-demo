@@ -3,9 +3,12 @@ import React, { useState, useEffect } from "react";
 
 function ConfirmationModal(props) {
 
+    useEffect(() => {
+    }, [props]);
+
 
     const handleYes = (event) => {
-        props.onClick();
+        props.onYesClick();
     }
 
 

@@ -67,7 +67,7 @@ export const ClassAPI = {
     const url = baseURL + "/class/summary";
     try {
       const response = await axios.get(url);
-      return response.data;
+      return response.data.class;
     } catch (e) {
       return false;
     }

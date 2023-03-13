@@ -15,6 +15,7 @@ services:
     environment:
       NODE_ENV: development
       DATABASE_URL: postgres://postgres:postgres@localhost/ 
+  
   postgres:
     image: postgres:13
     environment:
@@ -23,3 +24,17 @@ services:
       POSTGRES_DB: test
     ports:
       - "5432:5432"
+
+  prisma:
+    image : node:16
+    command: npm start
+    working_dir: /home/node/backend
+    volumes:
+      - ./server:/home/node/backend
+    ports:
+      - "1337:1337"
+    depends_on:
+      - postgres
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgresql://test:test_pass@postgres:5432/test?connect_timeout=300

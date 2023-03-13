@@ -1,4 +1,11 @@
-import { Button, Center, Link } from "@chakra-ui/react";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  Button,
+  Center,
+  Link,
+} from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import {
   ButtonGroup,
@@ -14,160 +21,222 @@ import {
 } from "@chakra-ui/react";
 import { AiFillEdit } from "react-icons/ai";
 import { BsBoxArrowUpRight, BsFillTrashFill } from "react-icons/bs";
+import { ClassAPI } from "../api/classAPI";
+import ClassModal from "../components/ClassModal";
+import ConfirmationModal from "../components/ConfirmationModal";
+import { StudentAPI } from "../api/studentAPI";
+import StudentModal from "../components/StudentModal";
 
-//This page should show a table of all students in the database.s
+//This page should show a table of all Classs in the database.s
 
 function Student() {
   const [data, setData] = useState([]);
+
+  const [modifyModal, setModifyModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+
+  const [activeStudent, setActiveStudent] = useState(false);
 
   const header = ["name", "actions"];
   const color1 = useColorModeValue("gray.400", "gray.400");
   const color2 = useColorModeValue("gray.400", "gray.400");
 
-  return (
-    <Flex w="full" p={50} alignItems="center" justifyContent="center">
-      <Table
-        w="full"
-        bg="white"
-        display={{
-          base: "block",
-          md: "table",
-        }}
-        sx={{
-          "@media print": {
-            display: "table",
-          },
-        }}
-      >
-        <Thead
-          display={{
-            base: "none",
-            md: "table-header-group",
-          }}
-          sx={{
-            "@media print": {
-              display: "table-header-group",
-            },
-          }}
-        >
-          <Tr>
-            {header.map((x) => (
-              <Th key={x}>{x}</Th>
-            ))}
-          </Tr>
-        </Thead>
+  useEffect(() => {
+    async function fetchData() {
+      const response = await StudentAPI.getStudentSummary();
+      if (response) {
+        setData(response);
+      }
+    }
+    fetchData();
+  }, []);
 
-        <Tbody
+  const handleEditButton = (studentData) => {
+    setActiveStudent(studentData);
+    setModifyModal(true);
+  };
+
+  const handleDeleteButton = (studentData) => {
+    setActiveStudent(studentData);
+    setDeleteModal(true);
+  };
+
+  return (
+    <>
+      <Breadcrumb m={5}>
+        <BreadcrumbItem>
+          <BreadcrumbLink href="/">Home</BreadcrumbLink>
+        </BreadcrumbItem>
+
+        <BreadcrumbItem>
+          <BreadcrumbLink href="/class">Class</BreadcrumbLink>
+        </BreadcrumbItem>
+      </Breadcrumb>
+      <Flex w="full" m={5} alignItems="center" justifyContent="center">
+        <Table
+          w="full"
+          bg="white"
           display={{
             base: "block",
-            lg: "table-row-group",
+            md: "table",
           }}
           sx={{
             "@media print": {
-              display: "table-row-group",
+              display: "table",
             },
           }}
         >
-          {/* Row Starts here */}
-          {data.map((token, tid) => {
-            return (
-              <Tr
-                key={tid}
-                display={{
-                  base: "grid",
-                  md: "table-row",
-                }}
-                sx={{
-                  "@media print": {
-                    display: "table-row",
-                  },
-                  gridTemplateColumns: "minmax(0px, 35%) minmax(0px, 65%)",
-                  gridGap: "10px",
-                }}
-              >
-                {Object.keys(token).map((x) => {
-                  if (x != "id")
-                    return (
-                      <React.Fragment key={`${tid}${x}`}>
-                        <Td
-                          display={{
-                            base: "table-cell",
-                            md: "none",
-                          }}
-                          sx={{
-                            "@media print": {
-                              display: "none",
-                            },
-                            textTransform: "uppercase",
-                            color: color1,
-                            fontSize: "xs",
-                            fontWeight: "bold",
-                            letterSpacing: "wider",
-                            fontFamily: "heading",
-                          }}
-                        >
-                          {x}
-                        </Td>
-                        <Td
-                          color={"gray.900"}
-                          fontSize="md"
-                          fontWeight="normal"
-                        >
-                          {token[x]}
-                        </Td>
-                      </React.Fragment>
-                    );
-                })}
-                <Td
+          <Thead
+            display={{
+              base: "none",
+              md: "table-header-group",
+            }}
+            sx={{
+              "@media print": {
+                display: "table-header-group",
+              },
+            }}
+          >
+            <Tr>
+              {header.map((x) => (
+                <Th key={x}>{x}</Th>
+              ))}
+            </Tr>
+          </Thead>
+
+          <Tbody
+            display={{
+              base: "block",
+              lg: "table-row-group",
+            }}
+            sx={{
+              "@media print": {
+                display: "table-row-group",
+              },
+            }}
+          >
+            {/* Row Starts here */}
+            {data.map((token, tid) => {
+              return (
+                <Tr
+                  key={tid}
                   display={{
-                    base: "table-cell",
-                    md: "none",
+                    base: "grid",
+                    md: "table-row",
                   }}
                   sx={{
                     "@media print": {
-                      display: "none",
+                      display: "table-row",
                     },
-                    textTransform: "uppercase",
-                    color: color2,
-                    fontSize: "xs",
-                    fontWeight: "bold",
-                    letterSpacing: "wider",
-                    fontFamily: "heading",
+                    gridTemplateColumns: "minmax(0px, 35%) minmax(0px, 65%)",
+                    gridGap: "10px",
                   }}
                 >
-                  Actions
-                </Td>
-                <Td>
-                  <ButtonGroup variant="solid" size="sm" spacing={3}>
-                    <Link href={`/student/${token["id"]}`}>
+                  {Object.keys(token).map((x) => {
+                    if (x != "id")
+                      return (
+                        <React.Fragment key={`${tid}${x}`}>
+                          <Td
+                            display={{
+                              base: "table-cell",
+                              md: "none",
+                            }}
+                            sx={{
+                              "@media print": {
+                                display: "none",
+                              },
+                              textTransform: "uppercase",
+                              color: color1,
+                              fontSize: "xs",
+                              fontWeight: "bold",
+                              letterSpacing: "wider",
+                              fontFamily: "heading",
+                            }}
+                          >
+                            {x}
+                          </Td>
+                          <Td
+                            color={"gray.900"}
+                            fontSize="md"
+                            fontWeight="normal"
+                          >
+                            {token[x]}
+                          </Td>
+                        </React.Fragment>
+                      );
+                  })}
+                  <Td
+                    display={{
+                      base: "table-cell",
+                      md: "none",
+                    }}
+                    sx={{
+                      "@media print": {
+                        display: "none",
+                      },
+                      textTransform: "uppercase",
+                      color: color2,
+                      fontSize: "xs",
+                      fontWeight: "bold",
+                      letterSpacing: "wider",
+                      fontFamily: "heading",
+                    }}
+                  >
+                    Actions
+                  </Td>
+                  <Td>
+                    <ButtonGroup variant="solid" size="sm" spacing={3}>
+                      <Link href={`/student/${token["id"]}`}>
+                        <IconButton
+                          colorScheme="blue"
+                          icon={<BsBoxArrowUpRight />}
+                          aria-label="Up"
+                        />
+                      </Link>
+
                       <IconButton
-                        colorScheme="blue"
-                        icon={<BsBoxArrowUpRight />}
-                        aria-label="Up"
+                        colorScheme="green"
+                        icon={<AiFillEdit />}
+                        aria-label="Edit"
+                        onClick={() => handleEditButton(token)}
                       />
-                    </Link>
+                      <IconButton
+                        colorScheme="red"
+                        variant="outline"
+                        icon={<BsFillTrashFill />}
+                        aria-label="Delete"
+                        onClick={() => handleDeleteButton(token)}
+                      />
+                    </ButtonGroup>
+                  </Td>
+                </Tr>
+              );
+            })}
 
-                    <IconButton
-                      colorScheme="green"
-                      icon={<AiFillEdit />}
-                      aria-label="Edit"
-                    />
-                    <IconButton
-                      colorScheme="red"
-                      variant="outline"
-                      icon={<BsFillTrashFill />}
-                      aria-label="Delete"
-                    />
-                  </ButtonGroup>
-                </Td>
-              </Tr>
-            );
-          })}
+            {/* Row Ends here */}
+          </Tbody>
+        </Table>
 
-          {/* Row Ends here */}
-        </Tbody>
-      </Table>
-    </Flex>
+        <StudentModal
+          isOpen={activeStudent && modifyModal}
+          student={activeStudent}
+          onClose={() => {
+            setModifyModal(false);
+          }}
+        ></StudentModal>
+
+        <ConfirmationModal
+          isOpen={activeStudent && deleteModal}
+          onClose={() => {
+            setDeleteModal(false);
+          }}
+          onYesClick={async () => {
+            await StudentAPI.deleteStudent(activeStudent.id);
+            window.location.reload(false);
+          }}
+        ></ConfirmationModal>
+      </Flex>
+    </>
   );
 }
 

@@ -16,38 +16,104 @@ import {
   Thead,
   Tr,
   Link,
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BsBoxArrowUpRight } from "react-icons/bs";
 import { FaPlus, FaSignOutAlt } from "react-icons/fa";
+import { useParams } from "react-router-dom";
+import { ClassAPI } from "../api/classAPI";
+import { StudentAPI } from "../api/studentAPI";
+import ConfirmationModal from "../components/ConfirmationModal";
 
 function StudentDetail() {
-  const [name, setName] = useState("Placeholder");
-  const [enrolledClassList, setEnrolledClassList] = useState([
-    { id: "enrolledClassId", name: "Class Name - Enrolled Class" },
-  ]);
-  const [allClassList, setAllClassList] = useState([
-    { id: "allcllassId", name: "Class Name - All Class" },
-  ]);
+  const [name, setName] = useState("");
+  const [enrolledClassList, setEnrolledClassList] = useState([]);
+  const [allClassList, setAllClassList] = useState([]);
+
+  const [activeClassId, setActiveClassId] = useState();
+  const [unenrollConfirmationModal, setUnenrollConfirmationModal] =
+    useState(false);
+  const [enrollConfirmationModal, setEnrollConfirmationModal] = useState(false);
+
+  const { id } = useParams();
+
+  useEffect(() => {
+    async function fetchData() {
+      const response = await StudentAPI.getStudentDetail(id);
+      const classes = await ClassAPI.getClassSummary();
+
+      if (response) {
+        setName(response.name);
+        setEnrolledClassList(response.enrolledClasses);
+      }
+
+      if (classes) {
+        setAllClassList(classes);
+      }
+    }
+    fetchData();
+  }, []);
+
+  const handleWithdrawButton = async (classId) => {
+    setActiveClassId(classId);
+    setUnenrollConfirmationModal(true);
+  };
+
+  const handleEnrollButton = () => {
+    setEnrollConfirmationModal(true);
+  };
+
+  const unenrollFunction = async () => {
+    await ClassAPI.removeStudentFromClass(activeClassId, id);
+    window.location.reload(false);
+  };
+
+  const enrollFunction = async () => {
+    await ClassAPI.addStudentToClass(activeClassId, id);
+    window.location.reload(false);
+  };
 
   return (
     <>
-      <SimpleGrid minChildWidth="20em" spacing="3em">
+      <Breadcrumb m={5}>
+        <BreadcrumbItem>
+          <BreadcrumbLink href="/">Home</BreadcrumbLink>
+        </BreadcrumbItem>
+
+        <BreadcrumbItem>
+          <BreadcrumbLink href="/student">Student Detail</BreadcrumbLink>
+        </BreadcrumbItem>
+      </Breadcrumb>
+
+      <SimpleGrid minChildWidth="20em" spacing="3em" m={5}>
         <>
           <SimpleGrid minChildWidth="100%" spacing="1em">
             <Card p={5}>
               <Stat>
-                <StatLabel>Name</StatLabel>
+                <StatLabel>Student Name</StatLabel>
                 <StatNumber>{name}</StatNumber>
               </Stat>
             </Card>
             <Card p={5}>
-              <Select placeholder="Select option">
+              <Select
+                placeholder="Select option"
+                onChange={(e) => {
+                  setActiveClassId(e.target.value);
+                }}
+              >
                 {allClassList.map((classes) => {
                   return <option value={classes.id}>{classes.name}</option>;
                 })}
               </Select>
-              <Button colorScheme={"facebook"} leftIcon={<FaPlus />} mt={3}>
+              <Button
+                colorScheme={"facebook"}
+                leftIcon={<FaPlus />}
+                mt={3}
+                onClick={handleEnrollButton}
+              >
                 Add Class
               </Button>
             </Card>
@@ -77,12 +143,15 @@ function StudentDetail() {
                               aria-label="Up"
                             />
                           </Link>
-                          <IconButton
+                          <Button
                             colorScheme="red"
                             variant="outline"
-                            icon={<FaSignOutAlt />}
                             aria-label="Delete"
-                          />
+                            leftIcon={<FaSignOutAlt />}
+                            onClick={() => handleWithdrawButton(classes.id)}
+                          >
+                            Withdraw
+                          </Button>
                         </ButtonGroup>
                       </Td>
                     </Tr>
@@ -93,6 +162,28 @@ function StudentDetail() {
           </TableContainer>
         </Card>
       </SimpleGrid>
+
+      {/* Unenroll Confirmation modal */}
+      <ConfirmationModal
+        isOpen={unenrollConfirmationModal}
+        onClose={() => {
+          setUnenrollConfirmationModal(false);
+        }}
+        onYesClick={() => {
+          unenrollFunction();
+        }}
+      ></ConfirmationModal>
+
+      {/* Enroll Confirmation modal */}
+      <ConfirmationModal
+        isOpen={enrollConfirmationModal}
+        onClose={() => {
+          setEnrollConfirmationModal(false);
+        }}
+        onYesClick={() => {
+          enrollFunction();
+        }}
+      ></ConfirmationModal>
     </>
   );
 }

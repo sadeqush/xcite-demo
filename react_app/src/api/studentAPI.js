@@ -41,7 +41,7 @@ export const StudentAPI = {
     const url = baseURL + "/student/summary";
     try {
       const response = await axios.get(url);
-      return response.data;
+      return response.data.students;
     } catch (e) {
       return false;
     }
@@ -50,7 +50,7 @@ export const StudentAPI = {
     const url = `${baseURL}/student/${id}`;
     try {
       const response = await axios.get(url);
-      return response.data;
+      return response.data.student;
     } catch (e) {
       return false;
     }

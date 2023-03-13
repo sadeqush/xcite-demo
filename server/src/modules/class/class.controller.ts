@@ -48,7 +48,19 @@ export const ClassController = {
     const classById = await ClassService.getClassById(id);
     if (!classById) return sendExceptionError(res);
 
-    return res.status(200).json({ class: classById });
+    let enrolledStudents: any[] = [];
+
+    classById.StudentEnrolledInClasses.forEach((e) => {
+      if (e.student.isActive) enrolledStudents.push(e.student);
+    });
+
+    let retval = {
+      name: classById.name,
+      id: classById.id,
+      enrolledStudents: enrolledStudents,
+    };
+
+    return res.status(200).json({ class: retval });
   },
 
   addStudentToClass: async (req: Request, res: Response) => {

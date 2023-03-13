@@ -36,7 +36,16 @@ export const ClassService = {
 
   getClassById: async (id: string) => {
     try {
-      const retval = await prisma.class.findUnique({ where: { id: id } });
+      const retval = await prisma.class.findUnique({
+        where: { id: id },
+        include: {
+          StudentEnrolledInClasses: {
+            select: {
+              student: { select: { name: true, id: true, isActive: true } },
+            },
+          },
+        },
+      });
       return retval;
     } catch (error) {
       return false;
