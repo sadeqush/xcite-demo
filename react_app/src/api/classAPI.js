@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = "http://localhost:3000/";
+const baseURL = "http://localhost:1337";
 
 export const ClassAPI = {
   // ClassRouter.post("/add", ClassController.addClass);
@@ -79,7 +79,7 @@ export const ClassAPI = {
 
     try {
       const response = await axios.get(url);
-      return response.data;
+      return response.data.class;
     } catch (e) {
       return false;
     }

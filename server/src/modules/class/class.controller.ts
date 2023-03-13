@@ -42,7 +42,7 @@ export const ClassController = {
   },
 
   getClassById: async (req: Request, res: Response) => {
-    const id = req.body.id;
+    const id = req.params.id;
     if (!id) return sendMalformedRequestError(res);
 
     const classById = await ClassService.getClassById(id);

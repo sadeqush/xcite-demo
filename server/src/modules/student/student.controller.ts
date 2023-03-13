@@ -45,7 +45,7 @@ export const StudentController = {
   },
 
   getStudentById: async (req: Request, res: Response) => {
-    const id = req.body.id;
+    const id = req.params.id;
     if (!id) return sendMalformedRequestError(res);
 
     const student = await StudentService.getStudentById(id);

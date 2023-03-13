@@ -1,5 +1,5 @@
 import { Button, Center, Link } from "@chakra-ui/react";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   ButtonGroup,
   Flex,
@@ -18,25 +18,9 @@ import { BsBoxArrowUpRight, BsFillTrashFill } from "react-icons/bs";
 //This page should show a table of all students in the database.s
 
 function Student() {
-  const header = ["name", "created", "id", "actions"];
-  const data = [
-    { name: "E'jiynae Curry", created: "7 days ago", id: "ASDfkbnasfbnmdasd" },
-    {
-      name: "Nashya Solomon",
-      created: "23 hours ago",
-      id: "ASDfkbnasfbnmdasd",
-    },
-    {
-      name: "Joseph Curry",
-      created: "A few seconds ago",
-      id: "ASDfkbnasfbnmdasd",
-    },
-    {
-      name: "Sage Jaspeth",
-      created: "A few hours ago",
-      id: "ASDfkbnasfbnmdasd",
-    },
-  ];
+  const [data, setData] = useState([]);
+
+  const header = ["name", "actions"];
   const color1 = useColorModeValue("gray.400", "gray.400");
   const color2 = useColorModeValue("gray.400", "gray.400");
 
@@ -102,32 +86,37 @@ function Student() {
                 }}
               >
                 {Object.keys(token).map((x) => {
-                  return (
-                    <React.Fragment key={`${tid}${x}`}>
-                      <Td
-                        display={{
-                          base: "table-cell",
-                          md: "none",
-                        }}
-                        sx={{
-                          "@media print": {
-                            display: "none",
-                          },
-                          textTransform: "uppercase",
-                          color: color1,
-                          fontSize: "xs",
-                          fontWeight: "bold",
-                          letterSpacing: "wider",
-                          fontFamily: "heading",
-                        }}
-                      >
-                        {x}
-                      </Td>
-                      <Td color={"gray.900"} fontSize="md" fontWeight="normal">
-                        {token[x]}
-                      </Td>
-                    </React.Fragment>
-                  );
+                  if (x != "id")
+                    return (
+                      <React.Fragment key={`${tid}${x}`}>
+                        <Td
+                          display={{
+                            base: "table-cell",
+                            md: "none",
+                          }}
+                          sx={{
+                            "@media print": {
+                              display: "none",
+                            },
+                            textTransform: "uppercase",
+                            color: color1,
+                            fontSize: "xs",
+                            fontWeight: "bold",
+                            letterSpacing: "wider",
+                            fontFamily: "heading",
+                          }}
+                        >
+                          {x}
+                        </Td>
+                        <Td
+                          color={"gray.900"}
+                          fontSize="md"
+                          fontWeight="normal"
+                        >
+                          {token[x]}
+                        </Td>
+                      </React.Fragment>
+                    );
                 })}
                 <Td
                   display={{

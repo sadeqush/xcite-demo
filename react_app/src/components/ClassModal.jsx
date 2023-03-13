@@ -1,7 +1,6 @@
 import { Button, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from "@chakra-ui/react"
 import React, { useState, useEffect } from "react";
-import { APICall } from "../api";
-import ConfirmationModal from "./ConfirmationModal";
+import { ClassAPI } from "../api/classAPI";
 
 function ClassModal(props) {
 
@@ -21,8 +20,11 @@ function ClassModal(props) {
     const handleNameChange = (event) => setName(event.target.value)
 
     const handleSaveOnclick = (event) => {
-        APICall.getStudentSummary();
+        //If props.class is present, it is an edit
+        if (!props.class) ClassAPI.addClass(name);
+        else ClassAPI.editClass(name, props.class.id)
         props.onClose()
+        window.location.reload(false)
     }
 
 

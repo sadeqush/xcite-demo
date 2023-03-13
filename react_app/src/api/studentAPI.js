@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = "http://localhost:3000";
+const baseURL = "http://localhost:1337";
 
 export const StudentAPI = {
   addStudent: async (name) => {
