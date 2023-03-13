@@ -9,7 +9,7 @@
     "start": "npm install && npx prisma generate && npx prisma db push && npx prisma db seed && npx ts-node-dev --no-notify --exit-child src"
   },
   "prisma": {
-    "seed": "ts-node prisma/seed.ts"
+    "seed": "node ./prisma/seed.js"
   },
   "dependencies": {
     "@prisma/client": "^4.11.0",

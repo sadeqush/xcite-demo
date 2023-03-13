@@ -54,7 +54,7 @@ export const StudentController = {
     let enrolledClasses: any[] = [];
 
     student.StudentEnrolledInClasses.forEach((e) => {
-      enrolledClasses.push(e.class);
+      if (e.class.isActive) enrolledClasses.push(e.class);
     });
 
     let retval = {
