@@ -76,7 +76,7 @@ export default function App() {
               Add New Student
             </Button>
             <Button
-              colorScheme={"blackAlpha"}
+              colorScheme={"facebook"}
               leftIcon={<FaUserPlus />}
               onClick={() => {
                 setAddClassModal(true);
