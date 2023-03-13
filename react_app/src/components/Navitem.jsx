@@ -1,9 +1,10 @@
 import { Flex, Icon, Link } from "@chakra-ui/react";
 
+
 export const NavItem = (props) => {
     const { icon, children, ...rest } = props;
     return (
-        <Link href={props.href}
+        <Link href={`/${props.href}`}
         >
             <Flex
                 align="center"

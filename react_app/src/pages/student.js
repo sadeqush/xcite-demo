@@ -1,4 +1,4 @@
-import { Button, Center } from "@chakra-ui/react";
+import { Button, Center, Link } from "@chakra-ui/react";
 import React from "react";
 import {
   ButtonGroup,
@@ -18,12 +18,24 @@ import { BsBoxArrowUpRight, BsFillTrashFill } from "react-icons/bs";
 //This page should show a table of all students in the database.s
 
 function Student() {
-  const header = ["name", "created", "actions"];
+  const header = ["name", "created", "id", "actions"];
   const data = [
-    { name: "Daggy", created: "7 days ago" },
-    { name: "Anubra", created: "23 hours ago" },
-    { name: "Josef", created: "A few seconds ago" },
-    { name: "Sage", created: "A few hours ago" },
+    { name: "E'jiynae Curry", created: "7 days ago", id: "ASDfkbnasfbnmdasd" },
+    {
+      name: "Nashya Solomon",
+      created: "23 hours ago",
+      id: "ASDfkbnasfbnmdasd",
+    },
+    {
+      name: "Joseph Curry",
+      created: "A few seconds ago",
+      id: "ASDfkbnasfbnmdasd",
+    },
+    {
+      name: "Sage Jaspeth",
+      created: "A few hours ago",
+      id: "ASDfkbnasfbnmdasd",
+    },
   ];
   const color1 = useColorModeValue("gray.400", "gray.400");
   const color2 = useColorModeValue("gray.400", "gray.400");
@@ -60,6 +72,7 @@ function Student() {
             ))}
           </Tr>
         </Thead>
+
         <Tbody
           display={{
             base: "block",
@@ -71,6 +84,7 @@ function Student() {
             },
           }}
         >
+          {/* Row Starts here */}
           {data.map((token, tid) => {
             return (
               <Tr
@@ -136,11 +150,14 @@ function Student() {
                 </Td>
                 <Td>
                   <ButtonGroup variant="solid" size="sm" spacing={3}>
-                    <IconButton
-                      colorScheme="blue"
-                      icon={<BsBoxArrowUpRight />}
-                      aria-label="Up"
-                    />
+                    <Link href={`/student/${token["id"]}`}>
+                      <IconButton
+                        colorScheme="blue"
+                        icon={<BsBoxArrowUpRight />}
+                        aria-label="Up"
+                      />
+                    </Link>
+
                     <IconButton
                       colorScheme="green"
                       icon={<AiFillEdit />}
@@ -157,6 +174,8 @@ function Student() {
               </Tr>
             );
           })}
+
+          {/* Row Ends here */}
         </Tbody>
       </Table>
     </Flex>
